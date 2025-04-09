@@ -1,3 +1,3 @@
-module github.com/jerrywoo96/AddForwardedHeader
+module github.com/filipmiik/traefik-standard-proxy-headers
 
 go 1.20

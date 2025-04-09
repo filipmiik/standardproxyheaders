@@ -1,10 +1,11 @@
-displayName: Add Forwarded Header
+displayName: Standard Proxy Headers
 type: middleware
 
-import: github.com/jerrywoo96/AddForwardedHeader
+import: github.com/filipmiik/treafik-standard-proxy-headers
 
-summary: Construct Forwarded Header from X-Forwarded-For, X-Forwarded-Host and X-Forwarded-Proto incoming request headers, and appends them to outgoing request headers.
+summary: Construct and add standard HTTP headers to outgoing requests according to RFC 7239 (Forward) and RFC 9110 (Via).
 
 testData:
-  by: "Traefik"
-  forHeader: "X-Real-Ip"
+  forwardedBySource: "SERVER_ADDR"
+  forwardedForSource: "REMOTE_ADDR"
+
