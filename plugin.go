@@ -1,4 +1,4 @@
-package standardproxyheaders
+package traefik_standard_proxy_headers
 
 import (
 	"context"
@@ -10,10 +10,10 @@ import (
 type Config struct {
 	ForwardedByHostname bool   `yaml:"forwardedByHostname"`
 	ForwardedByHeader   string `yaml:"forwardedByHeader"`
-	ForwardedByStatic   string `yaml:"forwardedByStatic"`
+	ForwardedByValue    string `yaml:"forwardedByValue"`
 	ForwardedForRemote  bool   `yaml:"forwardedForRemote"`
 	ForwardedForHeader  string `yaml:"forwardedForHeader"`
-	ForwardedForStatic  string `yaml:"forwardedForStatic"`
+	ForwardedForValue   string `yaml:"forwardedForValue"`
 }
 
 func CreateConfig() *Config {
@@ -25,10 +25,10 @@ type Plugin struct {
 	next                http.Handler
 	forwardedByHostname bool
 	forwardedByHeader   string
-	forwardedByStatic   string
+	forwardedByValue    string
 	forwardedForRemote  bool
 	forwardedForHeader  string
-	forwardedForStatic  string
+	forwardedForValue   string
 }
 
 func New(ctx context.Context, next http.Handler, config *Config, name string) (http.Handler, error) {
@@ -37,10 +37,10 @@ func New(ctx context.Context, next http.Handler, config *Config, name string) (h
 		next:                next,
 		forwardedByHostname: config.ForwardedByHostname,
 		forwardedByHeader:   strings.TrimSpace(config.ForwardedByHeader),
-		forwardedByStatic:   strings.TrimSpace(config.ForwardedByStatic),
+		forwardedByValue:    strings.TrimSpace(config.ForwardedByValue),
 		forwardedForRemote:  config.ForwardedForRemote,
 		forwardedForHeader:  strings.TrimSpace(config.ForwardedForHeader),
-		forwardedForStatic:  strings.TrimSpace(config.ForwardedForStatic),
+		forwardedForValue:   strings.TrimSpace(config.ForwardedForValue),
 	}, nil
 }
 
@@ -59,8 +59,8 @@ func (plugin *Plugin) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 		ForwardedBy = Hostname
 	} else if len(plugin.forwardedByHeader) > 0 {
 		ForwardedBy = strings.TrimSpace(req.Header.Get(plugin.forwardedByHeader))
-	} else if len(plugin.forwardedByStatic) > 0 {
-		ForwardedBy = plugin.forwardedByStatic
+	} else if len(plugin.forwardedByValue) > 0 {
+		ForwardedBy = plugin.forwardedByValue
 	}
 
 	// Set Forwarded for field
@@ -69,8 +69,8 @@ func (plugin *Plugin) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 		ForwardedFor = req.RemoteAddr
 	} else if len(plugin.forwardedForHeader) > 0 {
 		ForwardedFor = strings.TrimSpace(req.Header.Get(plugin.forwardedForHeader))
-	} else if len(plugin.forwardedForStatic) > 0 {
-		ForwardedFor = plugin.forwardedForStatic
+	} else if len(plugin.forwardedForValue) > 0 {
+		ForwardedFor = plugin.forwardedForValue
 	}
 
 	// Set other Forwarded fields
