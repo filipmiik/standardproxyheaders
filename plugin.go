@@ -1,4 +1,4 @@
-package traefik_standard_proxy_headers
+package standardproxyheaders
 
 import (
 	"context"
