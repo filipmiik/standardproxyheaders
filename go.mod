@@ -1,3 +1,3 @@
-module github.com/filipmiik/traefik-standard-proxy-headers
+module github.com/filipmiik/standardproxyheaders
 
 go 1.20

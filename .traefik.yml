@@ -1,7 +1,7 @@
 displayName: Standard Proxy Headers
 type: middleware
 
-import: github.com/filipmiik/traefik-standard-proxy-headers
+import: github.com/filipmiik/standardproxyheaders
 
 summary: Construct and add standard HTTP headers to outgoing requests according to RFC 7239 (Forward) and RFC 9110 (Via).
 
