@@ -2,6 +2,7 @@ package traefik_standard_proxy_headers
 
 import (
 	"context"
+	"net"
 	"net/http"
 	"os"
 	"strings"
@@ -66,16 +67,24 @@ func (plugin *Plugin) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 	// Set Forwarded for field
 	var ForwardedFor string
 	if plugin.forwardedForRemote {
-		ForwardedFor = req.RemoteAddr
+		RemoteHost, _, _ := net.SplitHostPort(req.RemoteAddr)
+		ForwardedFor = RemoteHost
 	} else if len(plugin.forwardedForHeader) > 0 {
 		ForwardedFor = strings.TrimSpace(req.Header.Get(plugin.forwardedForHeader))
 	} else if len(plugin.forwardedForValue) > 0 {
 		ForwardedFor = plugin.forwardedForValue
 	}
 
-	// Set other Forwarded fields
+	// Set Forwarded host field
 	ForwardedHost := req.Host
-	ForwardedProto := req.URL.Scheme
+
+	// Set Forwarded proto field
+	var ForwardedProto string
+	if req.TLS == nil {
+		ForwardedProto = "http"
+	} else {
+		ForwardedProto = "https"
+	}
 
 	// Construct Forwarded header
 	if len(ForwardedBy) > 0 {
