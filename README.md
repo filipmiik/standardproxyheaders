@@ -40,11 +40,11 @@ Forwarded `by` field configuration, `hostname > header > value` if more are spec
 
 Forwarded `for` field configuration, `remote > header > value` if more are specified at the same time.
 
-- If `forwardedByRemote` is `true`, the field is set to the hostname of the remote address.
-- If `forwardedByHeader` is not empty, the field is set to the value of such request header.
-- If `forwardedByValue` is not empty, the field is set to the provided value.
+- If `forwardedForRemote` is `true`, the field is set to the hostname of the remote address.
+- If `forwardedForHeader` is not empty, the field is set to the value of such request header.
+- If `forwardedForValue` is not empty, the field is set to the provided value.
 
-> When using the ProxyProtocol module, the `forwardedByRemote` can be used to get the client IP address since the remote
+> When using the ProxyProtocol module, the `forwardedForRemote` can be used to get the client IP address since the remote
 > address is resolved to the one from the proxy header.
 
 #### Forwarded host field
